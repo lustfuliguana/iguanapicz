@@ -1,4 +1,4 @@
-package iguanapicz;
+package picz;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -6,12 +6,12 @@ import java.util.List;
 
 import com.drew.imaging.ImageProcessingException;
 
-import iguanapicz.data.Album;
-import iguanapicz.data.Stash;
-import iguanapicz.jobs.CreateHtmlsJob;
-import iguanapicz.jobs.ReadAlbumsJob;
-import iguanapicz.jobs.ReadPhotosJob;
-import iguanapicz.jobs.ScalePhotoJob;
+import picz.data.Album;
+import picz.data.Stash;
+import picz.jobs.CreateHtmlsJob;
+import picz.jobs.ReadAlbumsJob;
+import picz.jobs.ReadPhotosJob;
+import picz.jobs.ScalePhotoJob;
 
 public class Iguana extends Logger {
 

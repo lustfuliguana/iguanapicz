@@ -1,4 +1,4 @@
-package iguanapicz.jobs;
+package picz.jobs;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -16,10 +16,10 @@ import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
-import iguanapicz.Logger;
-import iguanapicz.data.Album;
-import iguanapicz.data.Photo;
-import iguanapicz.data.Stash;
+import picz.Logger;
+import picz.data.Album;
+import picz.data.Photo;
+import picz.data.Stash;
 
 public class ScalePhotoJob extends Logger {
 

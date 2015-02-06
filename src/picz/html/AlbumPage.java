@@ -1,11 +1,11 @@
-package iguanapicz.html;
+package picz.html;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import iguanapicz.data.Album;
-import iguanapicz.data.Photo;
-import iguanapicz.data.Stash;
+import picz.data.Album;
+import picz.data.Photo;
+import picz.data.Stash;
 
 public class AlbumPage extends Page {
 

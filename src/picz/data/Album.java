@@ -1,4 +1,4 @@
-package iguanapicz.data;
+package picz.data;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.drew.imaging.ImageProcessingException;
+import picz.Logger;
 
-import iguanapicz.Logger;
+import com.drew.imaging.ImageProcessingException;
 
 public class Album extends Logger {
 

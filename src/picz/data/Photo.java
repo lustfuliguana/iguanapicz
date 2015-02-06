@@ -1,4 +1,4 @@
-package iguanapicz.data;
+package picz.data;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

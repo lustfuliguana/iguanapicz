@@ -1,8 +1,8 @@
-package iguanapicz.jobs;
+package picz.jobs;
 
-import iguanapicz.Logger;
-import iguanapicz.data.Album;
-import iguanapicz.data.Stash;
+import picz.Logger;
+import picz.data.Album;
+import picz.data.Stash;
 
 import java.io.File;
 import java.text.ParseException;

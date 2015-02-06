@@ -1,7 +1,7 @@
-package iguanapicz;
+package picz;
 
-import iguanapicz.data.Album;
-import iguanapicz.data.Photo;
+import picz.data.Album;
+import picz.data.Photo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

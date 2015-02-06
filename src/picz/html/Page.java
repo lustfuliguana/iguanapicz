@@ -1,6 +1,6 @@
-package iguanapicz.html;
+package picz.html;
 
-import iguanapicz.data.Stash;
+import picz.data.Stash;
 
 public abstract class Page {
 

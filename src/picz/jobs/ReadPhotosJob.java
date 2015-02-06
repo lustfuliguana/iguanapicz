@@ -1,4 +1,4 @@
-package iguanapicz.jobs;
+package picz.jobs;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.drew.imaging.ImageProcessingException;
 
-import iguanapicz.Logger;
-import iguanapicz.data.Album;
+import picz.Logger;
+import picz.data.Album;
 
 public class ReadPhotosJob extends Logger {
 

@@ -1,6 +1,6 @@
-package iguanapicz.data;
+package picz.data;
 
-import iguanapicz.Logger;
+import picz.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;

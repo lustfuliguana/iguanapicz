@@ -1,11 +1,11 @@
-package iguanapicz.jobs;
+package picz.jobs;
 
-import iguanapicz.data.Album;
-import iguanapicz.data.Photo;
-import iguanapicz.data.Stash;
-import iguanapicz.html.AlbumPage;
-import iguanapicz.html.IndexPage;
-import iguanapicz.html.PhotoPage;
+import picz.data.Album;
+import picz.data.Photo;
+import picz.data.Stash;
+import picz.html.AlbumPage;
+import picz.html.IndexPage;
+import picz.html.PhotoPage;
 
 import java.io.File;
 import java.io.FileWriter;

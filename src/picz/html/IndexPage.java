@@ -1,12 +1,12 @@
-package iguanapicz.html;
+package picz.html;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import iguanapicz.data.Album;
-import iguanapicz.data.Stash;
+import picz.data.Album;
+import picz.data.Stash;
 
 public class IndexPage extends Page {
 
