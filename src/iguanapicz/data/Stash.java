@@ -1,0 +1,92 @@
+package iguanapicz.data;
+
+import iguanapicz.Logger;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
+public class Stash extends Logger {
+
+	public static final File binDir = new File(System.getProperty("user.dir"));
+	private static final File tplsDir = new File(binDir.getAbsolutePath() + "/templates");
+	public static final File webDir = new File(binDir.getParent() + "/web");
+	public static final File albumsDir = new File(binDir.getParent() + "/albums");
+	
+	public static final String pageTemplate = readTemplate("body.tmpl");
+	public static final String itemTemplate = readTemplate("item.tmpl");
+	public static final String photoPageTemplate = readTemplate("photo.tmpl");
+	
+	public static boolean checkDirs() {
+		if (!binDir.exists()) {
+			error(binDir.getAbsolutePath() + " does not exist");
+			return false;
+		}
+		if (!tplsDir.isDirectory()) {
+			error(tplsDir.getAbsolutePath() + " does not exist");
+			return false;
+		}
+		if (!webDir.isDirectory()) {
+			error(webDir.getAbsolutePath() + " does not exist");
+			return false;
+		}
+		if (!albumsDir.isDirectory()) {
+			error(albumsDir.getAbsolutePath() + " does not exist");
+			return false;
+		}
+		if (!binDir.isDirectory()) {
+			error(binDir.getAbsolutePath() + " is not a directory");
+			return false;
+		}
+		if (!tplsDir.isDirectory()) {
+			error(tplsDir.getAbsolutePath() + " is not a directory");
+			return false;
+		}
+		if (!webDir.isDirectory()) {
+			error(webDir.getAbsolutePath() + " is not a directory");
+			return false;
+		}
+		if (!albumsDir.isDirectory()) {
+			error(albumsDir.getAbsolutePath() + " is not a directory");
+			return false;
+		}
+		if (!tplsDir.canRead()) {
+			error(tplsDir.getAbsolutePath() + " cannot read");
+			return false;
+		}
+		if (!webDir.canRead()) {
+			error(webDir.getAbsolutePath() + " cannot read");
+			return false;
+		}
+		if (!albumsDir.canRead()) {
+			error(albumsDir.getAbsolutePath() + " cannot read");
+			return false;
+		}
+		if (!webDir.canWrite()) {
+			error(webDir.getAbsolutePath() + " cannot write");
+			return false;
+		}
+		return true;
+	}
+	
+	private static String readTemplate(String filename) {
+		try {
+			FileReader reader = new FileReader(tplsDir.getAbsolutePath() + "/" + filename);
+			BufferedReader breader = new BufferedReader(reader);
+			String line = breader.readLine();
+			StringBuilder builder = new StringBuilder();
+			while (line != null) {
+				builder.append(line).append("\n");
+				line = breader.readLine();
+			}
+			reader.close();
+			breader.close();
+			return builder.toString();
+		}
+		catch (Exception e) {
+			error(e.getMessage(), e);
+			System.exit(1);
+		}
+		return null;
+	}
+}

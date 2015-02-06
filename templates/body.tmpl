@@ -1,0 +1,79 @@
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>##META_TITLE##</title>
+<style>
+body {
+	margin: 0px;
+	padding: 0px;
+	color: black;
+}
+a {
+	color: blue;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+.clear {
+	clear: both;
+}
+.left {
+	float: left;
+}
+.item {
+	margin: 7px;
+	max-width: 260px;
+	overflow: hidden;
+}
+.item img {
+	border: 1px solid grey;
+	padding: 5px;
+}
+.page-title {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 30px;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 30px;
+	border-bottom: 1px solid grey;
+	border-radius: 0px 0px 5px 5px;
+	background-color: #eeeeee;
+}
+.page-title span.title {
+	padding: 0px 20px;
+}
+.page-title-spacer {
+	height: 30px;
+}
+.hidden {
+	display: none;
+}
+.item-grey-text {
+	color: grey;
+	font-size: 14px;
+	float: right;
+	line-height: 18px;
+}
+</style>
+</head>
+
+<body>
+	<div class="page-title">
+		<span class="title">
+			<a href="##TITLE_URL##">##TITLE##</a>
+		</span>
+	</div>
+
+	<div class="page-title-spacer"></div>
+
+	##CONTENT##
+
+	<div class="clear"></div>
+</body>
+
+</html>
