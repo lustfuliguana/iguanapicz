@@ -22,6 +22,12 @@ a:hover {
 .left {
 	float: left;
 }
+.right {
+	float: right;
+}
+.exif-btn {
+	margin: 4px 10px 0px 0px;
+}
 .item {
 	margin: 7px;
 	max-width: 260px;
@@ -59,13 +65,35 @@ a:hover {
 	float: right;
 	line-height: 18px;
 }
+.hidden {
+	display: none;
+}
+.exif-short, .exif-full {
+	position: fixed;
+	top: 44px;
+	right: 5px;
+	background-color: #ccc;
+	opacity: 0.9;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+}
+th {
+	text-align: left;
+}
+ .exif-full {
+max-height: 90%;
+overflow: auto;
+}
 </style>
 </head>
 
 <body>
 	<div class="page-title">
-		<span class="title">
+		<span class="title left">
 			<a href="##TITLE_URL##">##TITLE##</a>
+		</span>
+		<span class="exif-btn right ##EXIF_BTN_CLASS##">
+			<input type="button" value="Exif" onclick="showShortExif();" />
 		</span>
 	</div>
 
@@ -74,6 +102,34 @@ a:hover {
 	##CONTENT##
 
 	<div class="clear"></div>
+
+	<div id="exif-short" class="exif-short hidden">
+		<table>##EXIF_SHORT##</table>
+		<a href="javascript: showFullExif()">Full Exif</a>
+	</div>
+	<div id="exif-full" class="exif-full hidden"><table>##EXIF_FULL##</table></div>
 </body>
 
+<script>
+function showShortExif() {
+	var o = document.getElementById('exif-short');
+	if (o.style.display != 'block') {
+		o.style.display = 'block';
+	}
+	else {
+		o.style.display = 'none';
+	}
+	document.getElementById('exif-full').style.display = 'none';
+}
+function showFullExif() {
+	showShortExif();
+	var o = document.getElementById('exif-full');
+	if (o.style.display != 'block') {
+		o.style.display = 'block';
+	}
+	else {
+		o.style.display = 'none';
+	}
+}
+</script>
 </html>

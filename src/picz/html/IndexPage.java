@@ -25,11 +25,13 @@ public class IndexPage extends Page {
 					.replaceAll("##ITEM_TITLE_CLASS##", "")
 					.replaceAll("##ITEM_TITLE##", a.getTitle())
 					.replaceAll("##ITEM_CLASS_GREY##", "item-grey-text")
+					.replaceAll("##EXIF_BTN_CLASS##", "hidden")
 					.replaceAll("##ITEM_GREY_TEXT##", sdf.format(a.getDate()));
 	}
 	
 	public String createPageHtml(String metaTitle,
 			String titleUrl, String title) {
-		return super.createPageHtml(metaTitle, titleUrl, title, content.toString());
+		return super.createPageHtml(metaTitle, titleUrl, title, content.toString())
+				.replaceAll("##EXIF_BTN_CLASS##", "hidden");
 	}
 }

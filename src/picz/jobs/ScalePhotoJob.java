@@ -68,7 +68,7 @@ public class ScalePhotoJob extends Logger {
 								240, 240, 100, false);
 						scale(p.getFile(), Stash.webDir + "/img/1024/"
 								+ a.getDir().getName() + "/" + p.getFile().getName(),
-								1024, 768, 100, false);
+								1024, 768, 100, true);
 					} catch (IOException e) {
 						error(e.getMessage(), e);
 					}

@@ -24,6 +24,7 @@ public class AlbumPage extends Page {
 	
 	public String createPageHtml(String metaTitle,
 			String titleUrl, String title) {
-		return super.createPageHtml(metaTitle, titleUrl, title, content.toString());
+		return super.createPageHtml(metaTitle, titleUrl, title, content.toString())
+				.replaceAll("##EXIF_BTN_CLASS##", "hidden");
 	}
 }

@@ -33,7 +33,7 @@ public class ReadAlbumsJob extends Logger {
 	private List<Album> sort(List<Album> albums) {
 		for (int i = 0; i < albums.size()-1; i++) {
 			for (int j = i+1; j < albums.size(); j++) {
-				if (albums.get(i).getDate().after(albums.get(j).getDate())) {
+				if (albums.get(i).getDate().before(albums.get(j).getDate())) {
 					Album album = albums.get(i);
 					albums.set(i, albums.get(j));
 					albums.set(j, album);

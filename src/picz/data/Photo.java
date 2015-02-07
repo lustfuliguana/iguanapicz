@@ -70,15 +70,15 @@ public class Photo extends Logger {
 		return exif;
 	}
 
-	private class Exif {
-		private static final String ROTATION = "Rotation";
-		private static final String EXPOSURE = "Exposure Time";
-		private static final String FNUMBER = "F-Number";
-		private static final String ISO = "ISO Speed Ratings";
-		private static final String FOCAL_LENGTH = "Focal Length";
-		private static final String FOCAL_LENGTH_35 = "Focal Length 35";
-		private static final String CAMERA = "Make";
-		private static final String MODEL = "Model";
+	public class Exif {
+		public static final String ROTATION = "Rotation";
+		public static final String EXPOSURE = "Exposure Time";
+		public static final String FNUMBER = "F-Number";
+		public static final String ISO = "ISO Speed Ratings";
+		public static final String FOCAL_LENGTH = "Focal Length";
+		public static final String FOCAL_LENGTH_35 = "Focal Length 35";
+		public static final String CAMERA = "Make";
+		public static final String MODEL = "Model";
 		
 		private String rotation = null;
 		private String exposure = null;
