@@ -58,8 +58,11 @@ public class Logger {
 	
 	private final void log(Level level, String msg, Exception e) {
 		Date dt = new Date();
-		String t = sdf.format(dt) + " [" + level.name() + "] "
-				+ clazz.getCanonicalName() + ": " + msg;
+		String t = sdf.format(dt) + " [" + level.name() + "] ";
+		if (level == Level.ERROR) {
+			t = t + clazz.getCanonicalName() + ":";
+		}
+		t = t + " " + msg;
 		if (level == Level.ERROR) {
 			errorOut.println(t.trim());
 		}

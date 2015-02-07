@@ -64,7 +64,7 @@ public class ScalePhotoJob extends Logger {
 			while (a != null) {
 				for (int i = 0; i < a.getPhotos().size(); i++) {
 					Photo p = a.getPhotos().get(i);
-					info("Scale photo \t" + (i + 1) + "/" + a.getPhotos().size()
+					info("Scale \t" + (i + 1) + "/" + a.getPhotos().size()
 							+ " \t(" + (albumIndex+1) + "/" + albums.size() + ")"
 							+ ": \t" + a.getTitle() + "/" + p.getFile().getName());
 					try {

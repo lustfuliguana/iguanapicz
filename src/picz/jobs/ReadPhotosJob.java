@@ -56,7 +56,7 @@ public class ReadPhotosJob extends Logger {
 				String[] fileNames = a.getDir().list();
 				for (int i = 0; i < fileNames.length; i++) {
 					String fileName = fileNames[i];
-					info("Reading photo \t" + (i + 1) + "/" + fileNames.length
+					info("Read \t" + (i + 1) + "/" + fileNames.length
 							+ " \t(" + (albumIndex+1) + "/" + albums.size() + ")"
 							+ ": \t" + a.getTitle() + "/" + fileName);
 					File file = new File(a.getDir().getAbsolutePath() + "/"

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 
 import picz.data.Photo;
 import picz.data.Photo.Exif;
@@ -130,7 +131,7 @@ public class PhotoPage extends Page {
 		return super
 				.createPageHtml(metaTitle, titleUrl, title, content.toString())
 				.replaceAll("##EXIF_BTN_CLASS##", "")
-				.replaceAll("##EXIF_SHORT##", exifShortHtml.toString())
-				.replaceAll("##EXIF_FULL##", exifFullHtml.toString());
+				.replaceAll("##EXIF_SHORT##", Matcher.quoteReplacement(exifShortHtml.toString()))
+				.replaceAll("##EXIF_FULL##", Matcher.quoteReplacement(exifFullHtml.toString()));
 	}
 }
