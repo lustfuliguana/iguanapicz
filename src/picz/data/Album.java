@@ -61,7 +61,7 @@ public class Album extends Logger {
 			}
 		}
 		
-		if (logo == null) {
+		if (logo == null && !photos.isEmpty()) {
 			logo = photos.get(0);
 		}
 		

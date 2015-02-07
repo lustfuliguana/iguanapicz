@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -24,24 +25,60 @@ import picz.data.Stash;
 public class ScalePhotoJob extends Logger {
 
 	private List<Album> albums;
+	private List<Thread> threads = new ArrayList<Thread>();
+	private int albumIndex = -1;
 
 	public ScalePhotoJob(List<Album> albums) {
 		this.albums = albums;
 	}
 
 	public void scale() throws IOException {
-		for (Album a : albums) {
-			for (Photo p : a.getPhotos()) {
-				scale(p.getFile(), Stash.webDir + "/img/240/"
-						+ a.getDir().getName() + "/" + p.getFile().getName(),
-						240, 240, 100, false);
-				scale(p.getFile(), Stash.webDir + "/img/1024/"
-						+ a.getDir().getName() + "/" + p.getFile().getName(),
-						1024, 768, 100, false);
+		for (int i = 0; i < Stash.THREAD_COUNT; i++) {
+			Thread t = new Thread(new ScalePhotoRunnable());
+			threads.add(t);
+			t.start();
+		}
+		for (Thread t : threads) {
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				error(e.getMessage(), e);
 			}
 		}
 	}
 
+	private synchronized Album getNextAlbum() {
+		albumIndex = albumIndex + 1;
+		if (albums.size() <= albumIndex) {
+			return null;
+		}
+		return albums.get(albumIndex);
+	}
+	
+	private class ScalePhotoRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			Album a = getNextAlbum();
+			while (a != null) {
+				for (Photo p : a.getPhotos()) {
+					try {
+						scale(p.getFile(), Stash.webDir + "/img/240/"
+								+ a.getDir().getName() + "/" + p.getFile().getName(),
+								240, 240, 100, false);
+						scale(p.getFile(), Stash.webDir + "/img/1024/"
+								+ a.getDir().getName() + "/" + p.getFile().getName(),
+								1024, 768, 100, false);
+					} catch (IOException e) {
+						error(e.getMessage(), e);
+					}
+				}
+				a = getNextAlbum();
+			}
+		}
+		
+	}
+	
 	private void scale(File file, String output, int w, int h, int q,
 			boolean preventCrop) throws IOException {
 		File out = new File(output);

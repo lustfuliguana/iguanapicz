@@ -8,6 +8,7 @@ import java.io.FileReader;
 
 public class Stash extends Logger {
 
+	public static int THREAD_COUNT = 1;
 	public static final File binDir = new File(System.getProperty("user.dir"));
 	private static final File tplsDir = new File(binDir.getAbsolutePath() + "/templates");
 	public static final File webDir = new File(binDir.getParent() + "/web");
