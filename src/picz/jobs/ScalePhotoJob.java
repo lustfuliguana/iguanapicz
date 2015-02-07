@@ -48,10 +48,11 @@ public class ScalePhotoJob extends Logger {
 	}
 
 	private synchronized Album getNextAlbum() {
-		albumIndex = albumIndex + 1;
-		if (albums.size() <= albumIndex) {
+		int index = albumIndex + 1;
+		if (albums.size() <= index) {
 			return null;
 		}
+		albumIndex = index;
 		return albums.get(albumIndex);
 	}
 	
@@ -61,7 +62,11 @@ public class ScalePhotoJob extends Logger {
 		public void run() {
 			Album a = getNextAlbum();
 			while (a != null) {
-				for (Photo p : a.getPhotos()) {
+				for (int i = 0; i < a.getPhotos().size(); i++) {
+					Photo p = a.getPhotos().get(i);
+					info("Scale photo \t" + (i + 1) + "/" + a.getPhotos().size()
+							+ " \t(" + (albumIndex+1) + "/" + albums.size() + ")"
+							+ ": \t" + a.getTitle() + "/" + p.getFile().getName());
 					try {
 						scale(p.getFile(), Stash.webDir + "/img/240/"
 								+ a.getDir().getName() + "/" + p.getFile().getName(),

@@ -14,7 +14,9 @@ public class ReadAlbumsJob extends Logger {
 	public List<Album> read() throws ParseException {
 		String[] albumNames = Stash.albumsDir.list();
 		List<Album> albums = new ArrayList<Album>();
-		for (String albumName : albumNames) {
+		for (int i = 0; i < albumNames.length; i++) {
+			String albumName = albumNames[i];
+			info("Reading album " + (i+1) + "/" + albumNames.length + ": "+ albumName);
 			File file = new File(Stash.albumsDir.getAbsolutePath() + "/" + albumName);
 			if (!file.isDirectory()) {
 				info(file.getAbsolutePath() + " is not a direcroty");

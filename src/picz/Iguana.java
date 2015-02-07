@@ -17,9 +17,9 @@ public class Iguana extends Logger {
 
 	private final static Logger log = new Logger(Iguana.class);
 	private final static long startTime = System.currentTimeMillis();
+	private final static int version = 2;
 	
 	public static void main(String[] args) throws ParseException, ImageProcessingException, IOException {
-		log.info("Started");
 		parseArgs(args); 
 		Stash.checkDirs();
 		
@@ -35,7 +35,7 @@ public class Iguana extends Logger {
 			if (arg.trim().startsWith("-t=")) {
 				try {
 					Stash.THREAD_COUNT = Integer.parseInt(arg.replaceAll("-t=", "").trim());
-					log.info("Using " + Stash.THREAD_COUNT + " threads");
+					log.info("Using " + Stash.THREAD_COUNT + " threads; version="+version);
 				}
 				catch (Exception e) {
 					log.error(e.getMessage(), e);
