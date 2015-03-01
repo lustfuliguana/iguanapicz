@@ -1,13 +1,11 @@
-package picz.jobs;
+package picz.tools;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.IIOImage;
@@ -18,74 +16,13 @@ import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
 import picz.Logger;
-import picz.data.Album;
-import picz.data.Photo;
-import picz.data.Stash;
 
-public class ScalePhotoJob extends Logger {
-
-	private List<Album> albums;
-	private List<Thread> threads = new ArrayList<Thread>();
-	private int albumIndex = -1;
-
-	public ScalePhotoJob(List<Album> albums) {
-		this.albums = albums;
-	}
-
-	public void scale() throws IOException {
-		for (int i = 0; i < Stash.THREAD_COUNT; i++) {
-			Thread t = new Thread(new ScalePhotoRunnable());
-			threads.add(t);
-			t.start();
-		}
-		for (Thread t : threads) {
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				error(e.getMessage(), e);
-			}
-		}
-	}
-
-	private synchronized Album getNextAlbum() {
-		int index = albumIndex + 1;
-		if (albums.size() <= index) {
-			return null;
-		}
-		albumIndex = index;
-		return albums.get(albumIndex);
-	}
+public class ScaleTool {
 	
-	private class ScalePhotoRunnable implements Runnable {
-
-		@Override
-		public void run() {
-			Album a = getNextAlbum();
-			while (a != null) {
-				for (int i = 0; i < a.getPhotos().size(); i++) {
-					Photo p = a.getPhotos().get(i);
-					info("Scale \t" + (i + 1) + "/" + a.getPhotos().size()
-							+ " \t(" + (albumIndex+1) + "/" + albums.size() + ")"
-							+ ": \t" + a.getTitle() + "/" + p.getFile().getName());
-					try {
-						scale(p.getFile(), Stash.webDir + "/img/240/"
-								+ a.getDir().getName() + "/" + p.getFile().getName(),
-								240, 240, 100, false);
-						scale(p.getFile(), Stash.webDir + "/img/1024/"
-								+ a.getDir().getName() + "/" + p.getFile().getName(),
-								1024, 768, 100, true);
-					} catch (IOException e) {
-						error(e.getMessage(), e);
-					}
-				}
-				a = getNextAlbum();
-			}
-		}
-		
-	}
+	private final static Logger LOG = new Logger();
 	
-	private void scale(File file, String output, int w, int h, int q,
-			boolean preventCrop) throws IOException {
+	public static void scale(File file, String output, int w, int h, int q,
+			boolean preventCrop, BufferedImage image) throws IOException {
 		File out = new File(output);
 		if (!out.getParentFile().exists()) {
 			out.getParentFile().mkdirs();
@@ -94,13 +31,15 @@ public class ScalePhotoJob extends Logger {
 			return;
 		}
 
-		resizeImageToFixedSize(file, w, h, out, q / 100, preventCrop);
+		resizeImageToFixedSize(file, w, h, out, q / 100, preventCrop, image);
 	}
 
 	// scales image to fixes size; crops image if needed (using specs)
-	private void resizeImageToFixedSize(File file, int w, int h, File output,
-			float q, boolean preventCrop) throws IOException {
-		BufferedImage image = ImageIO.read(file);
+	private static void resizeImageToFixedSize(File file, int w, int h, File output,
+			float q, boolean preventCrop, BufferedImage image) throws IOException {
+		if (image == null) {
+			image = ImageIO.read(file);
+		}
 		int width = image.getWidth();
 		int height = image.getHeight();
 		int x = 0;
@@ -160,7 +99,7 @@ public class ScalePhotoJob extends Logger {
 	}
 
 	// resize image and then saveImage
-	private void scaleAndSaveImage(BufferedImage sourceImage, int width,
+	private static void scaleAndSaveImage(BufferedImage sourceImage, int width,
 			int height, File file, float jpegQuality) {
 		Image imageObject = sourceImage.getScaledInstance(width, height,
 				Image.SCALE_AREA_AVERAGING);
@@ -178,7 +117,7 @@ public class ScalePhotoJob extends Logger {
 
 	// save image to file
 	@SuppressWarnings("rawtypes")
-	private void saveImage(BufferedImage bufferedImage, File file,
+	private static void saveImage(BufferedImage bufferedImage, File file,
 			float jpegQuality) {
 		ImageOutputStream outputStream = null;
 		try {
@@ -203,14 +142,14 @@ public class ScalePhotoJob extends Logger {
 				writer.dispose();
 			}
 		} catch (IOException e) {
-			error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		} finally {
 			if (outputStream != null) {
 				try {
 					outputStream.flush();
 					outputStream.close();
 				} catch (IOException e) {
-					error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		}

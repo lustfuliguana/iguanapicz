@@ -22,9 +22,9 @@ public class CreateHtmlsJob {
 	}
 
 	public void createHtmls() throws IOException {
+		createPhotoPages();
 		createIndexPage();
 		createAlbumPages();
-		createPhotoPages();
 	}
 
 	private void createAlbumPages() throws UnsupportedEncodingException, IOException {

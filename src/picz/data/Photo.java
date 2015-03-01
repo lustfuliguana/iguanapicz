@@ -1,5 +1,6 @@
 package picz.data;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import picz.Logger;
+import picz.tools.ScaleTool;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -21,6 +23,8 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 
 public class Photo extends Logger {
+	
+	private final static String horizontal = "horizontal";
 	
 	private File file;
 	private Album album;
@@ -44,6 +48,25 @@ public class Photo extends Logger {
 			date = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 		}
 		exif = new Exif(metadata);
+		scale(bufferedImage);
+	}
+	
+	private void scale(BufferedImage image) {
+		if (exif.getRotation() != null && !exif.getRotation().toLowerCase().equals(horizontal)) {
+			Graphics2D g = image.createGraphics();
+			g.rotate(-Math.PI/2);
+			g.dispose();
+		}
+		try {
+			ScaleTool.scale(file, Stash.webDir + "/img/240/"
+					+ album.getDir().getName() + "/" + file.getName(),
+					240, 240, 100, false, image);
+			ScaleTool.scale(file, Stash.webDir + "/img/1024/"
+					+ album.getDir().getName() + "/" + file.getName(),
+					1024, 768, 100, true, image);
+		} catch (IOException e) {
+			error(e.getMessage(), e);
+		}
 	}
 
 	public File getFile() {

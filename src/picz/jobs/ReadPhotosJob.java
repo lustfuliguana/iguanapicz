@@ -15,59 +15,76 @@ public class ReadPhotosJob extends Logger {
 
 	private List<Album> albums;
 	private List<Thread> threads = new ArrayList<Thread>();
+	
+	private int fileIndex = -1;
+	String[] fileNames = null;
 	private int albumIndex = -1;
-
+	
 	public ReadPhotosJob(List<Album> albums) {
 		this.albums = albums;
 	}
 
 	public List<Album> read() throws ImageProcessingException, IOException {
-		for (int i = 0; i < Stash.THREAD_COUNT; i++) {
-			Thread t = new Thread(new ReadPhotosRunnable());
-			threads.add(t);
-			t.start();
-		}
-		for (Thread t : threads) {
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				error(e.getMessage(), e);
+		for (albumIndex = 0; albumIndex < albums.size(); albumIndex++) {
+			threads.clear();
+			fileNames = albums.get(albumIndex).getDir().list();
+			if (fileNames == null || fileNames.length == 0) {
+				continue;
+			}
+			fileIndex = -1;
+			for (int j = 0; j < Stash.THREAD_COUNT; j++) {
+				Thread t = new Thread(new ReadPhotoRunnable(j+1));
+				threads.add(t);
+				t.start();
+			}
+			for (Thread t : threads) {
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					error(e.getMessage(), e);
+				}
 			}
 		}
 
 		return albums;
 	}
 
-	private synchronized Album getNextAlbum() {
-		int index = albumIndex + 1;
-		if (albums.size() <= index) {
+	private synchronized String getNextFileName() {
+		int index = fileIndex + 1;
+		if (fileNames == null || fileNames.length <= index) {
 			return null;
 		}
-		albumIndex = index;
-		return albums.get(albumIndex);
+		fileIndex = index;
+		return fileNames[fileIndex];
 	}
 
-	private class ReadPhotosRunnable implements Runnable {
+	private synchronized int getFileIndex() {
+		return fileIndex;
+	}
+	
+	private class ReadPhotoRunnable implements Runnable {
 
+		private int threadIndex = -1;
+		
+		ReadPhotoRunnable(int index) {
+			this.threadIndex = index;
+		}
+		
 		@Override
 		public void run() {
-			Album a = getNextAlbum();
-			while (a != null) {
-				String[] fileNames = a.getDir().list();
-				for (int i = 0; i < fileNames.length; i++) {
-					String fileName = fileNames[i];
-					info("Read \t" + (i + 1) + "/" + fileNames.length
-							+ " \t(" + (albumIndex+1) + "/" + albums.size() + ")"
-							+ ": \t" + a.getTitle() + "/" + fileName);
-					File file = new File(a.getDir().getAbsolutePath() + "/"
-							+ fileName);
-					try {
-						a.addPhoto(file);
-					} catch (ImageProcessingException | IOException e) {
-						error(e.getMessage(), e);
-					}
+			String fileName = getNextFileName();
+			while (fileName != null) {
+				info("Thread #" + threadIndex + " Read " + fileName+ "\t" + (getFileIndex() + 1) + "/" + fileNames.length
+						+ " \t(" + (albumIndex+1) + "/" + albums.size() + ")"
+						+ ": \t" + albums.get(albumIndex).getTitle() + "/" + fileName);
+				File file = new File(albums.get(albumIndex).getDir().getAbsolutePath() + "/"
+						+ fileName);
+				try {
+					albums.get(albumIndex).addPhoto(file);
+				} catch (ImageProcessingException | IOException e) {
+					error(e.getMessage(), e);
 				}
-				a = getNextAlbum();
+				fileName = getNextFileName();
 			}
 		}
 

@@ -11,7 +11,6 @@ import picz.data.Stash;
 import picz.jobs.CreateHtmlsJob;
 import picz.jobs.ReadAlbumsJob;
 import picz.jobs.ReadPhotosJob;
-import picz.jobs.ScalePhotoJob;
 
 public class Iguana extends Logger {
 
@@ -24,8 +23,7 @@ public class Iguana extends Logger {
 		Stash.checkDirs();
 		
 		List<Album>	albums = new ReadAlbumsJob().read();
-		albums = new ReadPhotosJob(albums).read();
-		new ScalePhotoJob(albums).scale();
+		new ReadPhotosJob(albums).read();
 		new CreateHtmlsJob(albums).createHtmls();
 		log.info("Finished in " + log.formatTime(System.currentTimeMillis()-startTime));
 	}
