@@ -47,10 +47,18 @@ public class Album extends Logger {
 		sorted = true;
 		
 		for (int i = 0; i < photos.size()-1; i++) {
+			if (photos.get(i) == null) {
+				error("NULL in " + dir.getName());
+				continue;
+			}
 			if (photos.get(i).getDate() == null) {
 				continue;
 			}
 			for (int j = i+1; j < photos.size(); j++) {
+				if (photos.get(j) == null) {
+					error("NULL2 in " + dir.getName());
+					continue;
+				}
 				if (logo == null) {
 					if (photos.get(i).getFile().getName().startsWith("00_")) {
 						logo = photos.get(i);
