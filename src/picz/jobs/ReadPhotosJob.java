@@ -61,11 +61,7 @@ public class ReadPhotosJob extends Logger {
 							+ ": \t" + a.getTitle() + "/" + fileName);
 					File file = new File(a.getDir().getAbsolutePath() + "/"
 							+ fileName);
-					try {
-						a.addPhoto(file);
-					} catch (ImageProcessingException | IOException e) {
-						error(e.getMessage(), e);
-					}
+					a.addPhoto(file);
 				}
 				a = getNextAlbum();
 			}

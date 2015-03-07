@@ -17,7 +17,7 @@ public class Iguana extends Logger {
 
 	private final static Logger log = new Logger(Iguana.class);
 	private final static long startTime = System.currentTimeMillis();
-	private final static int version = 2;
+	private final static int version = 3;
 	
 	public static void main(String[] args) throws ParseException, ImageProcessingException, IOException {
 		parseArgs(args); 

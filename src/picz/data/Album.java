@@ -1,7 +1,6 @@
 package picz.data;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 import picz.Logger;
-
-import com.drew.imaging.ImageProcessingException;
 
 public class Album extends Logger {
 
@@ -30,8 +27,17 @@ public class Album extends Logger {
 		title = dirName.substring(dir.getName().indexOf('_')+1);
 	}
 	
-	public void addPhoto(File file) throws ImageProcessingException, IOException {
-		photos.add(new Photo(file, this));
+	public void addPhoto(File file) {
+		Photo photo = null;
+		try {
+			photo = new Photo(file, this);
+		} catch (Exception e) {
+			error("Failed to ceat photo object", e);
+		}
+		if (photo == null) {
+			return;
+		}
+		photos.add(photo);
 	}
 	
 	public List<Photo> getPhotos() {
