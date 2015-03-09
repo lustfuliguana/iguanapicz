@@ -16,7 +16,7 @@ import java.util.List;
 public class CreateHtmlsJob {
 
 	private List<Album> albums;
-
+	
 	public CreateHtmlsJob(List<Album> albums) {
 		this.albums = albums;
 	}
