@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 
+import picz.data.Exif;
 import picz.data.Photo;
-import picz.data.Photo.Exif;
 import picz.data.Stash;
 
 public class PhotoPage extends Page {

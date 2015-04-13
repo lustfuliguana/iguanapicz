@@ -9,19 +9,22 @@ import com.drew.imaging.ImageProcessingException;
 
 import picz.Logger;
 import picz.data.Album;
+import picz.cache.Cache;
 import picz.data.Stash;
 
 public class ReadPhotosJob extends Logger {
 
 	private List<Album> albums;
 	private List<Thread> threads = new ArrayList<Thread>();
+	private Cache cache;
 	
 	private int fileIndex = -1;
 	String[] fileNames = null;
 	private int albumIndex = -1;
 	
-	public ReadPhotosJob(List<Album> albums) {
+	public ReadPhotosJob(List<Album> albums, Cache cache) {
 		this.albums = albums;
+		this.cache = cache;
 	}
 
 	public List<Album> read() throws ImageProcessingException, IOException {
@@ -79,7 +82,7 @@ public class ReadPhotosJob extends Logger {
 						+ ": \t" + albums.get(albumIndex).getTitle() + "/" + fileName);
 				File file = new File(albums.get(albumIndex).getDir().getAbsolutePath() + "/"
 						+ fileName);
-				albums.get(albumIndex).addPhoto(file);
+				albums.get(albumIndex).addPhoto(file, cache);
 				fileName = getNextFileName();
 			}
 		}

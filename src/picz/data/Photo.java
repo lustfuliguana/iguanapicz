@@ -3,23 +3,22 @@ package picz.data;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import picz.Logger;
+import picz.cache.Cache;
+import picz.cache.Record;
 import picz.tools.ScaleTool;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 
 public class Photo extends Logger {
@@ -31,13 +30,16 @@ public class Photo extends Logger {
 	private Date date;
 	private int width;
 	private int height;
-	
 	private Exif exif = null;
+	private String md5;
 	
-	public Photo(File file, Album album) throws IOException, ImageProcessingException {
+	public Photo(File file, Album album, Cache cache) throws IOException, ImageProcessingException {
 		this.album = album;
 		this.file = file;
 		
+		if (readFromCache(cache)) {
+			return;
+		}
 		BufferedImage bufferedImage = ImageIO.read(file);
 		width = bufferedImage.getWidth();
 		height = bufferedImage.getHeight();
@@ -49,6 +51,55 @@ public class Photo extends Logger {
 		}
 		exif = new Exif(metadata);
 		scale(bufferedImage);
+	}
+	
+	private static String hashFile(File file, String algorithm) {
+	    try (FileInputStream inputStream = new FileInputStream(file)) {
+	        MessageDigest digest = MessageDigest.getInstance(algorithm);
+	 
+	        byte[] bytesBuffer = new byte[1024];
+	        int bytesRead = -1;
+	 
+	        while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
+	            digest.update(bytesBuffer, 0, bytesRead);
+	        }
+	 
+	        byte[] hashedBytes = digest.digest();
+	 
+	        return convertByteArrayToHexString(hashedBytes);
+	    } catch (NoSuchAlgorithmException | IOException ex) {
+	    	ex.printStackTrace();
+	    	return null;
+	    }
+	}
+	
+    private static String convertByteArrayToHexString(byte[] arrayBytes) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < arrayBytes.length; i++) {
+            stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16)
+                    .substring(1));
+        }
+        return stringBuffer.toString();
+    }
+    
+	private boolean readFromCache(Cache cache) {
+		if (cache == null) {
+			return false;
+		}
+		md5 = hashFile(file, "MD5");
+		if (md5 == null) {
+			return false;
+		}
+		Record record = cache.search(md5);
+		if (record == null || record.isEmpty()) {
+			return false;
+		}
+		width = record.getWidth();
+		height = record.getHeight();
+		date = record.getDate();
+		exif = record.getExif();
+		
+		return true;
 	}
 	
 	private void scale(BufferedImage image) {
@@ -93,100 +144,7 @@ public class Photo extends Logger {
 		return exif;
 	}
 
-	public class Exif {
-		public static final String ROTATION = "Rotation";
-		public static final String EXPOSURE = "Exposure Time";
-		public static final String FNUMBER = "F-Number";
-		public static final String ISO = "ISO Speed Ratings";
-		public static final String FOCAL_LENGTH = "Focal Length";
-		public static final String FOCAL_LENGTH_35 = "Focal Length 35";
-		public static final String CAMERA = "Make";
-		public static final String MODEL = "Model";
-		
-		private String rotation = null;
-		private String exposure = null;
-		private String fnumber = null;
-		private String iso = null;
-		private String focalLength = null;
-		private String focalLength35 = null;
-		private String camera = null;
-		private String model = null;
-		
-		private Map<String, String> map = new HashMap<String, String>();
-		
-		Exif(Metadata metadata) {
-			Iterator<Directory> it = metadata.getDirectories().iterator();
-			while (it.hasNext()) {
-				Directory dir = it.next();
-				Collection<Tag> tags = dir.getTags();
-				Iterator<Tag> tagsIt = tags.iterator();
-				while (tagsIt.hasNext()) {
-					Tag tag = tagsIt.next();
-					map.put(tag.getTagName(), tag.getDescription());
-					
-					if (tag.getTagName().equals(ROTATION)) {
-						rotation = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(EXPOSURE)) {
-						exposure = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(FNUMBER)) {
-						fnumber = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(ISO)) {
-						iso = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(FOCAL_LENGTH)) {
-						focalLength = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(FOCAL_LENGTH_35)) {
-						focalLength35 = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(CAMERA)) {
-						camera = tag.getDescription();
-					}
-					else if (tag.getTagName().equals(MODEL)) {
-						model = tag.getDescription();
-					}
-				}
-			}
-		}
-
-		public String getRotation() {
-			return rotation;
-		}
-
-		public String getExposure() {
-			return exposure;
-		}
-
-		public String getFnumber() {
-			return fnumber;
-		}
-
-		public String getIso() {
-			return iso;
-		}
-
-		public String getFocalLength() {
-			return focalLength;
-		}
-
-		public String getFocalLength35() {
-			return focalLength35;
-		}
-
-		public String getCamera() {
-			return camera;
-		}
-
-		public String getModel() {
-			return model;
-		}
-
-		public Map<String, String> getMap() {
-			return map;
-		}
-		
+	public String getMd5() {
+		return md5;
 	}
 }

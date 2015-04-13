@@ -14,6 +14,7 @@ public class Stash {
 	private static final File tplsDir = new File(binDir.getAbsolutePath() + "/templates");
 	public static final File webDir = new File(binDir.getParent() + "/web");
 	public static final File albumsDir = new File(binDir.getParent() + "/albums");
+	public static final File cacheDir = new File(binDir.getAbsolutePath() + "/cache");
 	
 	public static final String pageTemplate = readTemplate("body.tmpl");
 	public static final String itemTemplate = readTemplate("item.tmpl");
@@ -24,15 +25,19 @@ public class Stash {
 			log.error(binDir.getAbsolutePath() + " does not exist");
 			return false;
 		}
-		if (!tplsDir.isDirectory()) {
+		if (!tplsDir.exists()) {
 			log.error(tplsDir.getAbsolutePath() + " does not exist");
 			return false;
 		}
-		if (!webDir.isDirectory()) {
+		if (!cacheDir.exists()) {
+			log.error(cacheDir.getAbsolutePath() + " does not exist");
+			return false;
+		}
+		if (!webDir.exists()) {
 			log.error(webDir.getAbsolutePath() + " does not exist");
 			return false;
 		}
-		if (!albumsDir.isDirectory()) {
+		if (!albumsDir.exists()) {
 			log.error(albumsDir.getAbsolutePath() + " does not exist");
 			return false;
 		}
@@ -42,6 +47,10 @@ public class Stash {
 		}
 		if (!tplsDir.isDirectory()) {
 			log.error(tplsDir.getAbsolutePath() + " is not a directory");
+			return false;
+		}
+		if (!cacheDir.isDirectory()) {
+			log.error(cacheDir.getAbsolutePath() + " is not a directory");
 			return false;
 		}
 		if (!webDir.isDirectory()) {
@@ -56,6 +65,10 @@ public class Stash {
 			log.error(tplsDir.getAbsolutePath() + " cannot read");
 			return false;
 		}
+		if (!cacheDir.canRead()) {
+			log.error(cacheDir.getAbsolutePath() + " cannot read");
+			return false;
+		}
 		if (!webDir.canRead()) {
 			log.error(webDir.getAbsolutePath() + " cannot read");
 			return false;
@@ -66,6 +79,10 @@ public class Stash {
 		}
 		if (!webDir.canWrite()) {
 			log.error(webDir.getAbsolutePath() + " cannot write");
+			return false;
+		}
+		if (!cacheDir.canWrite()) {
+			log.error(cacheDir.getAbsolutePath() + " cannot write");
 			return false;
 		}
 		return true;

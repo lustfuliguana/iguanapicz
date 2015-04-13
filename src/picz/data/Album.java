@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import picz.Logger;
+import picz.cache.Cache;
 
 public class Album extends Logger {
 
@@ -27,10 +28,10 @@ public class Album extends Logger {
 		title = dirName.substring(dir.getName().indexOf('_')+1);
 	}
 	
-	public void addPhoto(File file) {
+	public void addPhoto(File file, Cache cache) {
 		Photo photo = null;
 		try {
-			photo = new Photo(file, this);
+			photo = new Photo(file, this, cache);
 		} catch (Exception e) {
 			error("Failed to create photo object", e);
 		}
